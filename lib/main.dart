@@ -40,26 +40,40 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget drawBoxes(Size size) {
-    if (r.isEmpty) return Container();
+  List<Widget> drawBoxes(Size size) {
+    List<Widget> l = [];
+    if (r.isEmpty) return l;
 
-    double factorX = size.width;
-    double factorY = r[0] / r[0] * size.width;
-    double x = r[1], y = r[2], w = r[3] - r[1], h = r[4] - r[2];
+    l.add(Container(child: img));
 
-    return Positioned(
-      left: x * factorX,
-      top: y * factorY,
-      width: w * factorX,
-      height: h * factorY,
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-          color: Colors.yellowAccent,
-          width: 3,
-        )),
-      ),
-    );
+    int i = 0;
+
+    while (i < r.length) {
+      double factorX = size.width;
+      double factorY = r[i] / r[i] * size.width;
+      double x = r[i + 1],
+          y = r[i + 2],
+          w = r[i + 3] - r[i + 1],
+          h = r[i + 4] - r[i + 2];
+
+      l.add(Positioned(
+        left: x * factorX,
+        top: y * factorY,
+        width: w * factorX,
+        height: h * factorY,
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+            color: Colors.yellowAccent,
+            width: 3,
+          )),
+        ),
+      ));
+
+      i += 5;
+    }
+
+    return l;
   }
 
   @override
@@ -68,14 +82,10 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: const Text('Gatinho_net'),
+        centerTitle: true,
       ),
       body: Stack(
-        children: [
-          Container(
-            child: img,
-          ),
-          drawBoxes(MediaQuery.of(context).size),
-        ],
+        children: drawBoxes(MediaQuery.of(context).size),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
@@ -88,34 +98,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-/*class OpenPainter extends CustomPainter {
-  List p = [];
-  late Image image;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint1 = Paint()
-      ..color = Colors.yellowAccent
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0;
-
-    log("${size.width} ${size.height}");
-
-    if (p.isNotEmpty) {
-      log("${size.width} ${size.height}");
-      canvas.drawRect(
-          Offset(p[0] * size.width, p[1] * size.height) &
-              Size((p[2] - p[0]) * size.width, (p[3] - p[1]) * size.height),
-          paint1);
-      canvas.drawImage(image, Offset.zero, paint1);
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
-
-  void set(List P) {
-    p = P;
-  }
-}*/
